@@ -1,0 +1,46 @@
+html {
+	height: 100%;
+}
+
+body {
+	padding: 0;
+	padding-bottom: 20px;
+	margin: 0;
+	background: #f2f1eb;
+}
+
+nav {
+	padding: 10px;
+	background: #AC0040;
+}
+
+main {
+	padding: 0px 10px;
+}
+
+h1 {
+	margin: 0;
+	color: white;
+}
+
+.filter-area {
+	padding-right: 10px;
+	border-right: 1px solid lightgrey;
+	vertical-align: top;
+	min-width: 250px;
+	width: 25%;
+}
+
+.elenco {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.elenco > tbody > tr > td { 
+	border-bottom: 1px solid #ccc;
+	padding: 5px 0px;
+}
+
+.warning {
+	color: red;
+}
