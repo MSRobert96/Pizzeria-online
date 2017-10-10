@@ -69,11 +69,11 @@
 
 					<tr>
 						<td><strong>Giorno</strong></td>
-						<td><input type="date" name="giorno" value="<?=$o['giorno']?>" required></td>
+						<td><input type="date" name="giorno" value="<?=$o['giorno']?>" required pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}" placeholder="gg/mm/aaaa"></td>
 					</tr>
 					<tr>
 						<td><strong>Ora</strong></td>
-						<td><input type="time" name="ora" value="<?=$o['ora']?>" required></td>
+						<td><input type="time" name="ora" value="<?=$o['ora']?>" required pattern="[0-9]{2}:[0-9]{2}" placeholder="hh:mm"></td>
 					</tr>
 					<tr>
 						<td><strong>Indirizzo</strong></td>
