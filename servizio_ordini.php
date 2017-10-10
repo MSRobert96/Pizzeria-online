@@ -24,6 +24,13 @@
 		if ($_GET['comando']=="Aggiungi pizze" && !empty($_GET['quantita']) && $_GET['quantita']<=0)
 			header('Location:modifica_ordine.php?ordine='.$_GET['ordine'].'&errore=quantita');
 		
+		/*azione se si vuole togliere delle pizze da un ordine*/
+		elseif($_GET['comando']=="togli_pizze"){
+			$sql = $dbconn->prepare('DELETE FROM ordine_pizza WHERE ordine=? AND pizza=?');
+			$sql->execute(array($_GET['ordine'], $_GET['pizze']));
+			header('Location:modifica_ordine.php?ordine='.$_GET['ordine']);
+		}
+
 		/*azione se si vuole aggiungere delle pizze ad un ordine*/
 		elseif($_GET['comando']=="Aggiungi pizze" && !empty($_GET['quantita']) && $_GET['quantita']>0){
 			$controllo = $dbconn->prepare('SELECT CASE WHEN ? in (SELECT id FROM pizze_ordinabili()) THEN true ELSE false END');
@@ -40,15 +47,8 @@
 			header('Location:modifica_ordine.php?ordine='.$_GET['ordine'].'&errore=ingredienti');
 		}
 
-		/*azione se si vuole togliere delle pizze da un ordine*/
-		elseif($_GET['comando']=="togli_pizze"){
-			$sql = $dbconn->prepare('DELETE FROM ordine_pizza WHERE ordine=? AND pizza=?');
-			$sql->execute(array($_GET['ordine'], $_GET['pizze']));
-			header('Location:modifica_ordine.php?ordine='.$_GET['ordine']);
-		}
-
 		/*se i dati del'ordine non sono validi, torna alla schermata precedente*/
-		elseif(empty($_GET['giorno']) || empty($_GET['ora']) || empty($_GET['indirizzo'] || empty($_GET['utente']))) {
+		elseif(empty($_GET['giorno']) || empty($_GET['ora']) || empty($_GET['indirizzo']) || empty($_GET['utente']) || !validateDate($_GET['giorno']) || !validateTime($_GET['ora'])) {
 			header('Location:modifica_ordine.php?ordine=' . $_GET['ordine'] . '&errore=dati');
 		}
 

@@ -73,7 +73,7 @@
 					</tr>
 					<tr>
 						<td><strong>Ora</strong></td>
-						<td><input type="time" name="ora" value="<?=$o['ora']?>" required pattern="[0-9]{2}:[0-9]{2}" placeholder="hh:mm"></td>
+						<td><input type="time" name="ora" value="<?=$o['ora']?>" required pattern="(2[0-3]|[01][0-9]):([0-5][0-9])" placeholder="hh:mm"></td>
 					</tr>
 					<tr>
 						<td><strong>Indirizzo</strong></td>
