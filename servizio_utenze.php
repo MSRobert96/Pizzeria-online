@@ -21,9 +21,9 @@
 		}
 
 		/*azione per eliminare l'utenza*/
-		elseif($_POST['comando']=='Elimina_utente'){
+		elseif($_GET['comando']=='elimina_utente'){
 				$sql = $dbconn->prepare('DELETE FROM utenti WHERE id = ?');
-				$sql->execute(array($_POST['utente']));
+				$sql->execute(array($_GET['utente']));
 				header('Location:gestione_utenze.php');
 		}
 

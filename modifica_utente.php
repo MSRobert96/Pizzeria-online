@@ -59,7 +59,7 @@
 			</form>
 			
 			<?php if (controllo_admin()) { ?>
-				<p><a class="warning" href="servizio_utenze.php?comando=elimina_utente&utente=<?=$_POST['utente']?>">
+				<p><a class="warning" href="servizio_utenze.php?comando=elimina_utente&utente=<?=$utente?>">
 					Elimina utente e tutti i suoi dati, comprese le ordinazioni
 				</a></p>
 			<?php } ?>
