@@ -48,7 +48,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 
   function validateTime($time)
   {
-      return preg_match("/(2[0-3]|[01][0-9]):([0-5][0-9])/", $time)
+      return preg_match("/(2[0-3]|[01][0-9]):([0-5][0-9])/", $time);
   }
 ?>
 
