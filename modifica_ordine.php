@@ -12,6 +12,11 @@
 	
 		$pizze_ordinabili = $dbconn->query("SELECT id, nome, prezzo FROM pizze_ordinabili()");
 
+		$giorno = date("Y-m-d");
+		$ora = '20:00';
+
+		$readonly = '';
+
 		if(isset($_GET['ordine'])) {
 			$ordine->execute(array($_GET['ordine']));
 			$dettaglio->execute(array($_GET['ordine']));
@@ -19,6 +24,15 @@
 
 			$o = $ordine->fetch();
 			$pr = $prezzo->fetch();
+
+
+			if(($o['consegnato'] || $o['annullato']) && !controllo_admin())
+				$readonly = 'disabled';
+
+			$giorno = DateTime::createFromFormat('Y-m-d', $o['giorno']);
+			$giorno = $giorno->format('Y-m-d');
+			$ora = DateTime::createFromFormat('H:i:s', $o['ora']);
+			$ora = $ora->format("H:i");
 
 			if(!controllo_admin() && ($o['id_utente']!=$_SESSION['login']))
 				header('Location:gestione_ordini.php');
@@ -69,15 +83,15 @@
 
 					<tr>
 						<td><strong>Giorno</strong></td>
-						<td><input type="date" name="giorno" value="<?=$o['giorno']?>" required pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}" placeholder="gg/mm/aaaa"></td>
+						<td><input type="date" name="giorno" value="<?=$giorno?>" required pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="aaaa-mm-dd" <?=$readonly?>></td>
 					</tr>
 					<tr>
 						<td><strong>Ora</strong></td>
-						<td><input type="time" name="ora" value="<?=$o['ora']?>" required pattern="(2[0-3]|[01][0-9]):([0-5][0-9])" placeholder="hh:mm"></td>
+						<td><input type="time" name="ora" value="<?=$ora?>" required pattern="(2[0-3]|[01][0-9]):([0-5][0-9])" placeholder="hh:mm" <?=$readonly?>></td>
 					</tr>
 					<tr>
 						<td><strong>Indirizzo</strong></td>
-						<td><input type="text" name="indirizzo" value="<?=$o['indirizzo']?>" required></td>
+						<td><input type="text" name="indirizzo" value="<?=$o['indirizzo']?>" required <?=$readonly?>></td>
 					</tr>
 
 					<?php if(controllo_admin())	{ ?>
@@ -85,14 +99,18 @@
 							<td><input type="radio" name="status" value="consegnato" <?=($o['consegnato']) ? 'checked' : ''?>>Consegnato</td>
 							<td><input type="radio" name="status" value="annullato" <?=($o['annullato']) ? 'checked' : ''?>>Annullato</td>
 						</tr>
-					<?php } ?>			
+					<?php } elseif($o['consegnato']){ ?>
+						<tr><td colspan="2"><p class="warning">L'ordinazione è stata consegnata</p></td></tr>
+					<?php } elseif($o['annullato']){ ?>
+						<tr><td colspan="2"><p class="warning">L'ordinazione è stato annullato</p></td></tr>
+					<?php } ?>
 				</table>
 
 				<?php if($_GET['errore'] == 'dati') { ?>
 					<p class="warning">* dati non validi!</p>
 				<?php } ?>
 
-				<input class="conferma" type="submit" value="Salva ordine" name="comando">
+				<input class="conferma" type="submit" value="Salva ordine" name="comando" <?=$readonly?>>
 			</form>
 
 			<?php if(isset($_GET['ordine'])){ ?>
@@ -111,12 +129,12 @@
 					</table>
 
 					<!--tendina per selezionare delle pizze da aggiungere-->
-					<select name="pizza">
+					<select name="pizza" <?=$readonly?>>
 						<?php foreach($pizze_ordinabili as $p) { ?>
 							<option value="<?=$p['id']?>"><?=$p['nome']?></option>
 						<?php } ?>
 					</select>
-					<input type="number" name="quantita" min="1" value="1">
+					<input type="number" name="quantita" min="1" value="1" <?=$readonly?>>
 					
 					<p>Alcune pizze potrebbero mancare tra le opzioni a causa di terminazione degli ingredienti necessari.</p>
 
@@ -127,15 +145,15 @@
 						<p class="warning">* ci dispiace, abbiamo terminato gli ingredienti per la pizza scelta!</p>
 					<?php } ?>
 					
-					<input type="submit" value="Aggiungi pizze" name="comando">
+					<input type="submit" value="Aggiungi pizze" name="comando" <?=$readonly?>>
 				</form>
 
 				<h3>Totale: <?=$pr['prezzo']?>€</h3>
 
 				<hr>
 
-				<p><a href="gestione_ordini.php">Torna agli ordini</a></p>
 			<?php } ?>
+			<p><a href="gestione_ordini.php">Torna agli ordini</a></p>
 		</main>
 	</body>
 </html>
